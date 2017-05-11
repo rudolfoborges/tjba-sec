@@ -53,9 +53,10 @@ public class EncodeResponseService {
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+            return null;
         }
 
-        return null;
+
     }
 
     public byte[] buildJSon(final Session session) throws UnsupportedEncodingException {

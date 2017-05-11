@@ -13,7 +13,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import br.jus.tjba.mobile.sec.model.Session;
@@ -58,7 +60,7 @@ public class CreateSessionService {
 
             final byte[] keyBytes = Arrays.copyOf(digestOfPassword, 24);
 
-            SecretKey keySpec = new SecretKeySpec(keyBytes, "DESede");
+            SecretKey keySpec = new SecretKeySpec(keyBytes, "DESede/CBC/PKCS5Padding");
 
             return new String(Base64.encode(keySpec.getEncoded()));
 
@@ -68,5 +70,7 @@ public class CreateSessionService {
 
         return null;
     }
+
+
 
 }

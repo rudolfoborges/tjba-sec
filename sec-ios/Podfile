@@ -1,0 +1,5 @@
+platform :ios, '9.0'
+
+target "sec-ios" do  
+    pod 'Base64', '~> 1.1'
+end
