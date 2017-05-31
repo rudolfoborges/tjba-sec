@@ -8,7 +8,7 @@ public class Session {
 
     private String sessionId;
 
-    private String triploDesKey;
+    private String tripleDesKey;
 
     private String createdAt;
 
@@ -22,12 +22,12 @@ public class Session {
         this.sessionId = sessionId;
     }
 
-    public String getTriploDesKey() {
-        return triploDesKey;
+    public String getTripleDesKey() {
+        return tripleDesKey;
     }
 
-    public void setTriploDesKey(String triploDesKey) {
-        this.triploDesKey = triploDesKey;
+    public void setTripleDesKey(String tripleDesKey) {
+        this.tripleDesKey = tripleDesKey;
     }
 
     public String getCreatedAt() {
@@ -50,7 +50,7 @@ public class Session {
     public String toString() {
         return "Session{" +
                 "sessionId='" + sessionId + '\'' +
-                ", triploDesKey='" + triploDesKey + '\'' +
+                ", tripleDesKey='" + tripleDesKey + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", expires='" + expires + '\'' +
                 '}';

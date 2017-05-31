@@ -20,12 +20,15 @@ import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //Encode do token 3Des que servirá para autenticacao
-                final SecretKey secretKey = new SecretKeySpec(Base64.decode(session.getTriploDesKey()), "DESede");
+                final SecretKey secretKey = new SecretKeySpec(Base64.decode(session.getTripleDesKey()), "DESede");
                 final Cipher cipher3Des = Cipher.getInstance("DESede/CBC/PKCS5Padding", "BC");
                 final IvParameterSpec iv = new IvParameterSpec(new byte[8]);
 
@@ -115,17 +118,36 @@ public class MainActivity extends AppCompatActivity {
 
         protected String doInBackground(String... urls) {
             try {
-                final URL url = new URL("http://192.168.15.11:8080/v1/login");
+
+                TrustManager[] trustAllCerts = new TrustManager[]{
+                        new X509TrustManager() {
+                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                                return null;
+                            }
+                            public void checkClientTrusted(
+                                    java.security.cert.X509Certificate[] certs, String authType) {
+                            }
+                            public void checkServerTrusted(
+                                    java.security.cert.X509Certificate[] certs, String authType) {
+                            }
+                        }
+                };
+
+                SSLContext sc = SSLContext.getInstance("SSL");
+                sc.init(null, trustAllCerts, new java.security.SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+                final URL url = new URL("https://acrab.tjba.jus.br/tjbamobile2/service/processo/token");
 
                 final HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-                con.setRequestMethod("POST");
+                con.setRequestMethod("GET");
 
                 con.setRequestProperty("Content-Type", "text/plain");
 
 
                 int responseCode = con.getResponseCode();
-                System.out.println("\nSending 'POST' request to URL : " + url);
+                System.out.println("\nSending 'GET' request to URL : " + url);
                 System.out.println("Response Code : " + responseCode);
 
                 BufferedReader in = new BufferedReader(
@@ -142,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
                 return response.toString();
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return null;
             }
